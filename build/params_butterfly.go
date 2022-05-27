@@ -49,7 +49,9 @@ const UpgradeOhSnapHeight = 240
 
 var UpgradeSkyrHeight = abi.ChainEpoch(99999999999999)
 
-var ActorsCIDs = map[actors.Version]cid.Cid{}
+var ActorsCIDs = map[actors.Version]cid.Cid{
+ 	actors.Version8: MustParseCid("bafy2bzacecsvzsh2lyfhqxoupsecni5vppv3pba2vyax2wnvu5v5rrvvzlv6a"),
+ }
 
 func init() {
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2 << 30))
