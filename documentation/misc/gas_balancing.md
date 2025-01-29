@@ -5,11 +5,6 @@ The gas balancing process targets to set gas costs of syscalls to be in line wit
 The process can be either performed for all syscalls based on existing messages and chains or targeted
 at a single syscall.
 
-#### Reference hardware
-
-The reference hardware is TR3970x with 128GB of RAM. This is what was available at the time and
-may be subject to change.
-
 ### Complete gas balancing
 
 Complete gas balancing is performed using a `lotus-bench` the process is based on importing a chain export
