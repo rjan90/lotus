@@ -40,13 +40,26 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
+        echo "Starting label-stale-draft-prs job" # ADDED: Job start log
+
         # Calculate cutoff date for last update (365 days ago)
-        cutoff_date="2025-01-28"
+        cutoff_date=$(date -d "365 days ago" +%Y-%m-%d)
+        cutoff_date="2025-01-28" # Your test cutoff date - keep this for testing
+        echo "Cutoff date: $cutoff_date" # ADDED: Log cutoff date
+
+        echo "Running gh pr list command..." # ADDED: Log before gh pr list
         prs=$(gh pr list --repo $GITHUB_REPOSITORY --state open \
           --json number,updatedAt,isDraft \
           --jq ".[] | select(.isDraft) | select(.updatedAt < \"$cutoff_date\") | .number")
-          
-        for pr in $prs; do
-          echo "Marking PR #$pr as stale"
-          gh pr edit $pr --add-label "kind/stale"
-        done
+        echo "gh pr list output: $prs" # ADDED: Log gh pr list output
+
+        if [[ -z "$prs" ]]; then # ADDED: Check if prs is empty
+          echo "No stale draft PRs found based on cutoff date: $cutoff_date" # ADDED: Log if no PRs found
+        else
+          echo "Found stale draft PRs: $prs" # ADDED: Log found PRs
+          for pr in $prs; do
+            echo "Marking PR #$pr as stale..." # ADDED: Log before gh pr edit
+            gh pr edit $pr --add-label "kind/stale"
+            echo "Finished marking PR #$pr as stale." # ADDED: Log after gh pr edit
+          done
+        fi
